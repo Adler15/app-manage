@@ -47,7 +47,8 @@ def install_app():
             container = client.containers.run(image=image.tags[0], ports={8090: 8090}, name=image.tags[0].split(':')[0],
                                               detach=True)
             logging.info(f'启动镜像：{image.tags[0]} 成功, 容器id为{container.short_id}')
-            return jsonify(message='启动成功', image_name=image.tags[0], container_id=container.short_id), 200
+            return jsonify(status='SUCCESS', message='启动成功', image_name=image.tags[0],
+                           container_id=container.short_id), 200
     except:
         logging.error(f'启动镜像报错，错误为:{traceback.format_exc()}')
-        return jsonify(message='启动失败', error_info=traceback.format_exc()), 500
+        return jsonify(status='FAILED', message='启动失败', error_info=traceback.format_exc()), 500
