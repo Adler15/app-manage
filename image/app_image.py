@@ -5,12 +5,12 @@ import traceback
 import docker
 from flask import Blueprint, request, jsonify
 
-install = Blueprint("install", __name__)
+image = Blueprint("image", __name__)
 
 client = docker.DockerClient(base_url='unix://var/run/docker.sock')
 
 
-@install.route('/app')
+@image.route('/load', methods=['POST'])
 def install_app():
     """
     20210511 当前：根据传入的镜像，load到相应的服务器上
@@ -42,13 +42,25 @@ def install_app():
             image_list = client.images.load(i.read())
             i.close()
             # 根据镜像，启动容器
-            image = image_list[0]
-            logging.info(f'当前镜像的short_id:{image.short_id},tags:{image.tags[0]}')
-            container = client.containers.run(image=image.tags[0], ports={8090: 8090}, name=image.tags[0].split(':')[0],
+            i = image_list[0]
+            logging.info(f'当前镜像的short_id:{i.short_id},tags:{i.tags[0]}')
+            container = client.containers.run(image=i.tags[0], ports={8090: 8090}, name=i.tags[0].split(':')[0],
                                               detach=True)
-            logging.info(f'启动镜像：{image.tags[0]} 成功, 容器id为{container.short_id}')
+            logging.info(f'启动镜像：{i.tags[0]} 成功, 容器id为{container.short_id}')
             return jsonify(status='SUCCESS', message='启动成功', image_name=image.tags[0],
                            container_id=container.short_id), 200
     except:
         logging.error(f'启动镜像报错，错误为:{traceback.format_exc()}')
         return jsonify(status='FAILED', message='启动失败', error_info=traceback.format_exc()), 500
+
+
+@image.route('/remove', methods=['DELETE'])
+def remove_image():
+    try:
+        image_name = request.args.get('image_name')
+        client.images.remove(image=image_name)
+        logging.info(f'镜像 {image_name} 已删除')
+        return jsonify(status='SUCCESS', message='删除镜像成功', image_name=image_name), 200
+    except:
+        logging.error(f'删除镜像错误，错误原因：{traceback.format_exc()}')
+        return jsonify(status='FAILED', message='删除镜像失败', error_info=traceback.format_exc()), 500

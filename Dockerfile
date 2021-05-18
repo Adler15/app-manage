@@ -15,6 +15,7 @@ CMD ["gunicorn","app:app","-c","gunicorn.conf.py"]
 
 #ENTRYPOINT ["gunicorn", "--config", "gunicorn.conf.py", "app:app"]
 
-# docker run -d -p 8091:8091 --name app-service
+# docker run -d -p 8091:8091 --name docker-api-service
 # -v /tmp/gunicorn_socket:/tmp/gunicorn_socket
-# -v /var/run/docker.sock:/var/run/docker.sock app-service:0.1
+# -v /var/run/docker.sock:/var/run/docker.sock
+# -v /var/k2data/images:/var/k2data/images docker-api-service:0.1
