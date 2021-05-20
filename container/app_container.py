@@ -9,6 +9,21 @@ container = Blueprint('container', __name__)
 client = docker.DockerClient(base_url='unix://var/run/docker.sock')
 
 
+@container.route('/run')
+def run_container():
+    try:
+        image_name = request.args.get('image_name')
+        logging.info(f'接受的镜像名为：{image_name}')
+        c = client.containers.run(image=image_name, ports={8090: 8090}, name=image_name.split(':')[0],
+                                  detach=True)
+        logging.info(f'容器 {c.name} 已启动')
+        return jsonify(status='SUCCESS', message='启动成功', container_id=c.short_id,
+                       container_name=c.name), 200
+    except:
+        logging.error(f'启动错误，错误原因：{traceback.format_exc()}')
+        return jsonify(status='FAILED', message='启动失败', error_info=traceback.format_exc()), 500
+
+
 @container.route('/stop')
 def stop_container():
     try:

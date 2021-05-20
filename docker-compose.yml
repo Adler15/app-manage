@@ -1,0 +1,16 @@
+version: '3.3'
+services:
+  docker-api-service:
+    container_name: docker-api-service
+    image: docker-api-service:0.1
+    ports:
+      - "8091:8091"
+    volumes:
+      - /tmp/gunicorn_socket:/tmp/gunicorn_socket
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/k2data/bcf-deploy-dist-v1.0.0/bcf/app-images:/k2data/images
+    logging:
+      driver: json-file
+      options:
+        max-file: '2'
+        max-size: 10m
