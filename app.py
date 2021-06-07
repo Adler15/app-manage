@@ -16,11 +16,17 @@ app = Flask(__name__)
 app.register_blueprint(container_blueprint, url_prefix='/container')
 app.register_blueprint(image_blueprint, url_prefix='/image')
 
+# 读取配置文件中的 nacos地址
+app.config.from_pyfile('env.ini', silent=True)
+nacos_address = app.config['NACOS_ADDRESS']
+service_ip = app.config['SERVICE_IP']
+service_port = app.config['SERVICE_PORT']
+
 # nacos的服务注册
 global_nacos_proxy = NacosProxy()
-hostname = socket.gethostname()
-local_address = socket.gethostbyname(hostname)
-global_nacos_proxy.register_nacos('app-manage-service', '192.168.130.117', local_address, 5000, 'DEFAULT')
+# hostname = socket.gethostname()
+# local_address = socket.gethostbyname(hostname)
+global_nacos_proxy.register_nacos('docker-api-service', nacos_address, service_ip, service_port, 'DEFAULT')
 
 
 # 获取nacos配置信息

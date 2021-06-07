@@ -14,3 +14,7 @@ services:
       options:
         max-file: '2'
         max-size: 10m
+networks:
+  default:
+    external:
+      name: k2data-bcf

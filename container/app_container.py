@@ -14,7 +14,8 @@ def run_container():
     try:
         image_name = request.args.get('image_name')
         logging.info(f'接受的镜像名为：{image_name}')
-        c = client.containers.run(image=image_name, ports={8090: 8090}, name=image_name.split(':')[0],
+        # ports = {8090: 8090},
+        c = client.containers.run(image=image_name, network='k2data-bcf', name=image_name.split(':')[0],
                                   detach=True)
         logging.info(f'容器 {c.name} 已启动')
         return jsonify(status='SUCCESS', message='启动成功', container_id=c.short_id,

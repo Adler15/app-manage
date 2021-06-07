@@ -24,12 +24,12 @@ class NacosProxy(object):
         self.client.add_naming_instance(self.service_name, self.ip, self.port, self.cluster_name)
         self.send_heartbeat()
 
-    # 30s发送一次心跳
+    # 15s发送一次心跳
     def send_heartbeat(self):
         self.client.send_heartbeat(self.service_name, self.ip, self.port, self.cluster_name)
         # print('TimeNow:%s' % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
         # print("beat")
-        t = Timer(30, self.send_heartbeat)
+        t = Timer(15, self.send_heartbeat)
         t.start()
 
     def fetch_remote_config(self, data_id, group):
