@@ -1,5 +1,6 @@
 import logging
 import socket
+import os
 
 from flask import Flask
 
@@ -17,16 +18,18 @@ app.register_blueprint(container_blueprint, url_prefix='/container')
 app.register_blueprint(image_blueprint, url_prefix='/image')
 
 # 读取配置文件中的 nacos地址
-app.config.from_pyfile('env.ini', silent=True)
-nacos_address = app.config['NACOS_ADDRESS']
-service_ip = app.config['SERVICE_IP']
-service_port = app.config['SERVICE_PORT']
+# app.config.from_pyfile('env.ini', silent=True)
+# nacos_address = app.config['NACOS_ADDRESS']
+# service_ip = app.config['SERVICE_IP']
+# service_port = app.config['SERVICE_PORT']
+# 从环境变量读取配置
+nacos_address = os.environ.get('SPRING.CLOUD.NACOS.DISCOVERY.URI')
 
 # nacos的服务注册
 global_nacos_proxy = NacosProxy()
-# hostname = socket.gethostname()
-# local_address = socket.gethostbyname(hostname)
-global_nacos_proxy.register_nacos('docker-api-service', nacos_address, service_ip, service_port, 'DEFAULT')
+hostname = socket.gethostname()
+local_host = socket.gethostbyname(hostname)
+global_nacos_proxy.register_nacos('bcf-docker-api-service', nacos_address, local_host, '8091', 'DEFAULT')
 
 
 # 获取nacos配置信息

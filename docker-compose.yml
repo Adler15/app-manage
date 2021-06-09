@@ -1,8 +1,10 @@
 version: '3.3'
 services:
-  docker-api-service:
-    container_name: docker-api-service
-    image: docker-api-service:0.1
+  bcf-docker-api-service:
+    container_name: bcf-docker-api-service
+    image: bcf-docker-api-service:0.1
+#    env_file:
+#      - ./envfile
     ports:
       - "8091:8091"
     volumes:

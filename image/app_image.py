@@ -49,7 +49,7 @@ def install_app():
             return jsonify(status='SUCCESS', message='导入镜像成功', image_name=im.tags[0]), 200
     except:
         logging.error(f'导入镜像报错，错误为:{traceback.format_exc()}')
-        return jsonify(status='FAILED', message='导入镜像失败', error_info=traceback.format_exc()), 500
+        return jsonify(status='FAILED', message='导入镜像失败', error_info='导入镜像时报错'), 500
 
 
 @image.route('/remove', methods=['DELETE'])
@@ -61,4 +61,4 @@ def remove_image():
         return jsonify(status='SUCCESS', message='删除镜像成功', image_name=image_name), 200
     except:
         logging.error(f'删除镜像错误，错误原因：{traceback.format_exc()}')
-        return jsonify(status='FAILED', message='删除镜像失败', error_info=traceback.format_exc()), 500
+        return jsonify(status='FAILED', message='删除镜像失败', error_info='删除镜像时失败'), 500

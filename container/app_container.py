@@ -22,7 +22,7 @@ def run_container():
                        container_name=c.name), 200
     except:
         logging.error(f'启动错误，错误原因：{traceback.format_exc()}')
-        return jsonify(status='FAILED', message='启动失败', error_info=traceback.format_exc()), 500
+        return jsonify(status='FAILED', message='启动失败', error_info='启动容器时报错'), 500
 
 
 @container.route('/stop')
@@ -37,7 +37,7 @@ def stop_container():
                        container_name=c.name), 200
     except:
         logging.error(f'关闭错误，错误原因：{traceback.format_exc()}')
-        return jsonify(status='FAILED', message='关闭失败', error_info=traceback.format_exc()), 500
+        return jsonify(status='FAILED', message='关闭失败', error_info='关闭容器时报错'), 500
 
 
 @container.route('/restart')
@@ -52,7 +52,7 @@ def restart_container():
                        container_name=c.name), 200
     except:
         logging.error(f'关闭错误，错误原因：{traceback.format_exc()}')
-        return jsonify(status='FAILED', message='启动失败', error_info=traceback.format_exc()), 500
+        return jsonify(status='FAILED', message='启动失败', error_info='重启容器时报错'), 500
 
 
 @container.route('/remove', methods=['DELETE'])
@@ -65,7 +65,7 @@ def remove_contain():
         return jsonify(status='SUCCESS', message='删除镜像成功', container_name=c.name), 200
     except:
         logging.error(f'删除容器错误，错误原因：{traceback.format_exc()}')
-        return jsonify(status='FAILED', message='删除容器失败', error_info=traceback.format_exc()), 500
+        return jsonify(status='FAILED', message='删除容器失败', error_info='删除容器时报错'), 500
 
 
 @container.route('/status')
@@ -83,4 +83,4 @@ def get_container_status():
         return jsonify(status='SUCCESS', message='获取容器状态成功', container_status=status, status_code=status_code), 200
     except:
         logging.error(f'查询容器状态错误，错误原因：{traceback.format_exc()}')
-        return jsonify(status='FAILED', message='查询容器状态失败', error_info=traceback.format_exc()), 500
+        return jsonify(status='FAILED', message='查询容器状态失败', error_info='查询容器运行状态时报错'), 500
