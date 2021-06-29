@@ -51,8 +51,23 @@ def restart_container():
         return jsonify(status='SUCCESS', message='启动成功', container_id=c.short_id,
                        container_name=c.name), 200
     except:
-        logging.error(f'关闭错误，错误原因：{traceback.format_exc()}')
-        return jsonify(status='FAILED', message='启动失败', error_info='重启容器时报错'), 500
+        logging.error(f'重启错误，错误原因：{traceback.format_exc()}')
+        return jsonify(status='FAILED', message='重启失败', error_info='重启容器时报错'), 500
+
+
+@container.route('/start')
+def start_container():
+    try:
+        container_id = request.args.get('container_id')
+        logging.info(f'接受的容器id为：{container_id}')
+        c = client.containers.get(container_id)
+        c.start()
+        logging.info(f'容器 {c.name} 已启动')
+        return jsonify(status='SUCCESS', message='启动成功', container_id=c.short_id,
+                       container_name=c.name), 200
+    except:
+        logging.error(f'启动错误，错误原因：{traceback.format_exc()}')
+        return jsonify(status='FAILED', message='启动失败', error_info='启动容器时报错'), 500
 
 
 @container.route('/remove', methods=['DELETE'])
