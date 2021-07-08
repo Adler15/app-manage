@@ -5,6 +5,8 @@ services:
     image: bcf-docker-api-service:0.1
 #    env_file:
 #      - ./envfile
+    environment:
+      - SPRING.CLOUD.NACOS.DISCOVERY.URI=192.168.130.109:8082
     ports:
       - "8091:8091"
     volumes:
